@@ -233,7 +233,7 @@ def make_edge(source: dict, target: dict, *, status: str, edge_type: str, ration
     }
 
 
-def generate_edges(events: list[dict], max_elapsed_seconds: int = 86400) -> list[dict]:
+def generate_edges(events: list[dict], max_elapsed_seconds: int = 86400, *, artifact_frequency: Counter | None = None, population_size: int | None = None) -> list[dict]:
     """Candidate textual links only; generic words and inherited bodies never match.
 
     Known publisher ordering is required for a directed candidate. Equal,
@@ -242,7 +242,8 @@ def generate_edges(events: list[dict], max_elapsed_seconds: int = 86400) -> list
     """
     active = [event for event in events if event.get("text", "").strip()]
     indexed = {event["id"]: artifacts(event) for event in active}
-    frequency = Counter(token for tokens in indexed.values() for token in tokens)
+    frequency = artifact_frequency if artifact_frequency is not None else Counter(token for tokens in indexed.values() for token in tokens)
+    frequency_population = len(active) if population_size is None else population_size
     edges = []
     for index, a in enumerate(active):
         for b in active[index + 1:]:
@@ -250,7 +251,7 @@ def generate_edges(events: list[dict], max_elapsed_seconds: int = 86400) -> list
                 continue
             shared = sorted(indexed[a["id"]] & indexed[b["id"]])
             # Very common artifacts are background task context rather than a distinctive link.
-            shared = [token for token in shared if frequency[token] <= max(3, len(active) // 4)]
+            shared = [token for token in shared if frequency[token] <= max(3, frequency_population // 4)]
             if not shared:
                 continue
             da, db = parse_timestamp(a.get("timestamp")), parse_timestamp(b.get("timestamp"))

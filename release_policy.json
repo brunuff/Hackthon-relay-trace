@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "approval_basis": "Existing reviewed public Collusion demo at bce0b0ae560d9f48df1689e2d0fc86be45f9ae71; no approval for other data. Updating requires Bruno review.",
+  "snapshot_sha256": "057eb2d85f0118a97d4817beefc462d1e7159251e9865ef7db0c61ac138d038a",
+  "dataset": {
+    "id": "collusion-wiki-2026-09-03",
+    "title": "Collusion.wiki redacted public revision export",
+    "source_url": "https://collusion.wiki/explorer/download",
+    "download_url": "https://collusion.wiki/explorer/download/revisions.jsonl.gz",
+    "retrieved_at": "2026-10-03T13:04:56.447019+00:00",
+    "sha256": "9c2a4ef0ccbfb5b42be8422342a6bd3a389a4a047bc891e3148354dd65b63c96",
+    "acquisition_mode": "public-redacted-dataset",
+    "synthetic": false,
+    "publisher_generated_at": "2026-09-03T03:42:36Z",
+    "source_files": [
+      {
+        "filename": "revisions.jsonl.gz",
+        "url": "https://collusion.wiki/explorer/download/revisions.jsonl.gz",
+        "sha256": "9c2a4ef0ccbfb5b42be8422342a6bd3a389a4a047bc891e3148354dd65b63c96",
+        "bytes": 3226133
+      },
+      {
+        "filename": "events.jsonl.gz",
+        "url": "https://collusion.wiki/explorer/download/events.jsonl.gz",
+        "sha256": "989780118de3dc05031ee5920a761c565a97b64d3721688593adc0794fcfb7b8",
+        "bytes": 486683
+      },
+      {
+        "filename": "manifest.json.gz",
+        "url": "https://collusion.wiki/explorer/download/manifest.json.gz",
+        "sha256": "ee4c5785d61054ef993a4a10708d9698d7d1f86ac210810b6899bae035eda092",
+        "bytes": 6132
+      },
+      {
+        "filename": "pages.jsonl.gz",
+        "url": "https://collusion.wiki/explorer/download/pages.jsonl.gz",
+        "sha256": "2cffa83e0cc8de3dc467d9e9b03e1f735f54b4fde5a191f9e01f7e9dfee51f3a",
+        "bytes": 233553
+      }
+    ],
+    "limitations": [
+      "This is a selected set of public wiki revisions, not a complete record of agent activity.",
+      "Different handles do not prove different agents; the same handle does not prove identity continuity.",
+      "Revision bodies are cumulative snapshots. Candidate matching uses newly added text rather than inherited page content.",
+      "Reported task clocks differ from publisher timestamps; elapsed times here use publisher timestamps only.",
+      "An observed textual acknowledgement or claimed reproduction is not an independently verified read, execution, or causal effect.",
+      "No model prompts, private memories, context resets, evaluator results, or independent tool traces are included.",
+      "This wiki swarm was probably distinct from the July Hugging Face swarm; no collective-goal completion or shutdown cause is established.",
+      "Curated episodes demonstrate a mechanism and its ambiguity; they are not an unbiased prevalence estimate."
+    ],
+    "selection": "Explicit revision IDs in data/episodes.json; three purposively selected examples, not a random sample."
+  }
+}
