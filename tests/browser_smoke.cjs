@@ -68,6 +68,13 @@ async function main() {
     await page.waitForFunction(() => document.querySelector('#notice').textContent.startsWith('Could not open this file:'));
     assert.equal(await page.locator('#event-count').textContent(),'1');
     checks.push('Malformed JSON shows an error and retains the prior dataset');
+    // SYNTHETIC classification fixture: a documentation URL must not imply
+    // that a user-supplied research-gated record is public.
+    const restricted = {...fixture, dataset:{id:'synthetic-restricted-access-test',title:'SYNTHETIC restricted-access classification test',access_class:'restricted-research',source_url:'https://huggingface.co/datasets/aidigestorg/ai-village'}};
+    await page.setInputFiles('#file-input',{name:'synthetic-restricted-access.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(restricted))});
+    await page.waitForFunction(() => document.querySelector('#dataset-badge').textContent.includes('Restricted'));
+    assert.doesNotMatch(await page.locator('#dataset-badge').textContent(),/Public/);
+    checks.push('A source documentation URL does not label restricted research data public');
     assert.deepEqual(errors,[]);
     assert.deepEqual(requests,[]);
     checks.push('No page errors or HTTP requests occurred during the offline checks');

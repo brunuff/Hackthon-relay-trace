@@ -71,7 +71,7 @@
     $('dataset-context').textContent = [string(corpus.dataset.acquisition_mode), corpus.dataset.retrieved_at ? 'Retrieved ' + dateLabel(corpus.dataset.retrieved_at, true) : 'Retrieval date not supplied'].filter(Boolean).join(' · ');
     $('event-count').textContent = corpus.events.length.toLocaleString(); $('edge-count').textContent = corpus.edges.length.toLocaleString(); $('handle-count').textContent = handles.length.toLocaleString(); $('page-count').textContent = pages.length.toLocaleString();
     const synthetic = corpus.dataset.synthetic === true || /synthetic|demo_generated/i.test(string(corpus.dataset.acquisition_mode));
-    $('dataset-badge').textContent = synthetic ? 'Synthetic example · not findings' : corpus.dataset.source_url ? 'Public evidence snapshot' : 'Local evidence snapshot';
+    $('dataset-badge').textContent = synthetic ? 'Synthetic example · not findings' : corpus.dataset.access_class === 'restricted-research' ? 'Restricted research snapshot' : corpus.dataset.source_url ? 'Evidence snapshot' : 'Local evidence snapshot';
     $('dataset-badge').className = 'dataset-badge' + (synthetic ? ' synthetic' : '');
     clear($('limitations-list'));
     const limitations = list(corpus.dataset.limitations);

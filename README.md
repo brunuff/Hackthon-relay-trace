@@ -87,6 +87,38 @@ original rights and terms; see `DATA_NOTES.md`. No gated AI Village data is
 included. Agent-authored content is displayed as literal text and never
 executed.
 
+## AI Village local importer
+
+The optional adapter now follows the supplied AI Village column schema and
+has been checked against the supplied agent registry and manifest. It uses
+UUID identity links and preserves source row/file hashes. Synthetic tests
+cover chat, memory snapshots, session intentions, executed actions,
+provider-shaped responses, and tool outputs. No behavioral AI Village rows or
+transmission findings are included in this release.
+
+Put approved local tables under `data/raw/ai-village/`, then run:
+
+```sh
+PYTHONPATH=src python3 -m swarm_tracer.ai_village \
+  --input-dir data/raw/ai-village \
+  --start 2026-05-29T07:00:00Z --end 2026-06-03T07:00:00Z \
+  --out data/processed/ai-village-evidence.json
+```
+
+This streams source rows and bounds the selected output, requiring session
+parents for selected turns. It makes no network requests and generates no
+transmission edges. The dates above produce an exploration slice. For a small
+pilot crop containing memory baselines just outside the interval, omit date
+flags and preserve those context records; otherwise new-memory claims lack
+their requested comparison. Current row content can reflect later updates,
+which remain explicit in provenance.
+
+The smallest next inputs are chat and memory tables. Events and goals add
+context; sessions and turns add action evidence. Event-table importing is not
+implemented yet. See [input requirements](docs/AI_VILLAGE_INPUTS.md),
+[metadata checks](docs/AI_VILLAGE_VALIDATION.md), and
+[the pilot protocol](docs/AI_VILLAGE_PILOT.md).
+
 ## Next research step
 
 With approved AI Village access, extend the same evidence model to connect a

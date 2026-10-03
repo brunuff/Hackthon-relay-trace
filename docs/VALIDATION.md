@@ -20,7 +20,7 @@ Its bytes matched the initial snapshot exactly. SHA-256:
 
 ## Automated review
 
-All 23 Python tests pass, including 11 independently authored checks. Coverage
+The initial public-data release passed all 23 Python tests, including 11 independently authored checks. Coverage
 includes cumulative snapshots, replacement-line inheritance, handle boundaries,
 duplicate IDs, uncertainty-overlapping clocks, malformed timestamps, fixed-origin
 downloads and redirects, literal source content, adversarial JSON imports and
@@ -68,3 +68,22 @@ This is a functional and methodological prototype review, not a complete
 accessibility audit, security certification or held-out precision/recall
 benchmark. The curated cases do not establish propagation prevalence, causal
 goal transmission or the cause of the July Hugging Face swarm's ending.
+
+## AI Village adapter checkpoint
+
+The schema-grounded local importer adds 21 synthetic tests. All 44 repository
+tests pass. A CLI import of the actual supplied manifest and agent table
+loads 46 agent metadata entries and emits zero behavioral records or relations.
+Real chat, memory, session, and turn rows have not been supplied.
+
+The regenerated demo passes nine real-browser checks with no page errors or
+HTTP requests. The added check verifies that a source documentation URL does
+not label restricted research data public. The source archive contains no
+raw AI Village input, supplied schema/changelog/example, or local AI Village
+processed output, and has no duplicate entries.
+
+The curated Collusion evidence snapshot retains the SHA-256 above. The current
+standalone demo SHA-256 is
+`96a5fff7d8ead0c3c10932314316db29598fff2aa81281299ed9b627dd220627`.
+See `AI_VILLAGE_VALIDATION.md` for metadata fingerprints and the distinction
+between actual metadata checks and synthetic behavioral-table tests.
