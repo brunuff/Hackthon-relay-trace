@@ -1,6 +1,6 @@
 # AI Village pilot protocol
 
-Status on 2026-10-03: preparation only. AI Village access and the exact schema have not been obtained. No gated records have been downloaded, no adapter has been validated against this dataset, and this document reports no new finding.
+Status on 2026-10-03: an access request has been submitted and is awaiting review by the dataset authors, as shown in an account-page snapshot supplied by the project owner. Dataset-file access and the exact schema have not been obtained. No gated records have been downloaded, no adapter has been validated against this dataset, and this document reports no new finding.
 
 ## Question
 
