@@ -1,9 +1,11 @@
-# RelayTrace submission draft
+# RelayTrace submission record
 
 Status: the implementation and public-data validation are complete. The project
 is published at https://github.com/brunuff/Hackthon-relay-trace. This document
-contains project reference notes. Bruno Costa's online registration is confirmed;
-the project submission has not occurred.
+contains project reference notes. Bruno Costa registered online and submitted
+RelayTrace on October 3, 2026. The official form displayed "Thank you for
+submitting the form!" Receipt was verified at 15:51 UTC. The judges' eligibility
+and award decisions have not been verified.
 
 ## Project title
 
@@ -68,8 +70,8 @@ extension requiring its publisher's manual access approval.
 ## Materials to enter in the form
 
 - Repository URL: https://github.com/brunuff/Hackthon-relay-trace
-- Explanation: Bruno must write the form answer himself; the sections above
-  provide technical facts to check, not text to paste into the form.
+- Explanation: the user-approved write-up reproduced below, with AI assistance
+  disclosed in Notes for judges.
 - Demonstration: standalone `RelayTrace_demo.html` in the repository/release.
 - Participant public name: **Bruno Costa**.
 - Participant email: **provided privately for the organizer's form**.
@@ -86,9 +88,21 @@ extension requiring its publisher's manual access approval.
 
 The live submission form was inspected on October 3, 2026. It requires a short
 write-up or a 2–3 minute video link explaining what was built and how to use it.
-The real-results and notes-for-judges fields are optional. Metadata has been
-prepared in the form, but no project entry has been submitted.
+The real-results and notes-for-judges fields are optional. The project entry
+was submitted with the approved write-up and the AI-assistance disclosure.
 
 The form explicitly says: "Please write your answers on this form yourself,
-not with AI." It permits AI use for the project, code and video. Bruno should
-compose the narrative form answers himself using verified project facts.
+not with AI." It permits AI use for the project, code and video. The submitted
+Notes for judges explicitly disclosed AI drafting and revision of the write-up.
+The receipt establishes delivery, not an eligibility determination.
+
+
+## Submitted write-up
+
+Inspired by a fungal analogy, we built RelayTrace to investigate whether artifacts left by one AI agent can persist and influence another. A Python pipeline extracts contributions from public wiki revisions, while an offline viewer links them to later references, acknowledgements, and claims of reuse.
+
+Open the demo, select an episode, and inspect the source records, timestamps, and evidence status behind each connection. The tool distinguishes observed references, inferred connections, and unresolved cases, helping investigate information reuse without treating it as proof of behavioral transfer.
+
+## Submitted Notes for judges
+
+Disclosure: this write-up was drafted and revised with AI assistance, then approved by Bruno Costa. The project code and review also used AI assistance. Dataset: the public redacted Collusion.wiki export.
