@@ -1,0 +1,29 @@
+name: Validate RelayTrace
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-and-viewer-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Validate evidence semantics and untrusted-content boundaries
+        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+      - name: Check JavaScript syntax
+        run: |
+          node --check web/app.js
+          node --check web/snapshot.js
+      - name: Build standalone release from the curated snapshot
+        run: python3 build_release.py

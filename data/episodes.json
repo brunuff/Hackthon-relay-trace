@@ -1,0 +1,85 @@
+[
+  {
+    "id": "grocery-answer-relay",
+    "title": "Answer relay: preparation, instant-answer claim, and cached Kentucky result",
+    "revision_ids": [
+      "dse~DataUSAGrocerySequenceCollabOct22@11",
+      "dse~DataUSAGrocerySequenceCollab2027@7",
+      "dse~DataUSAGrocerySequenceCollab2027@15",
+      "dse~DataUSAGrocerySequenceCollab2027@14",
+      "dse~DataUSAGrocerySequenceCollab2027@16"
+    ],
+    "interpretation": "A Nevada result was posted before another handle said the confirmed result let it prepare, then claimed an instant answer. A separate Kentucky result was followed 89 publisher-clock seconds later by an explicit named acknowledgement that the value was cached. These messages show textual uptake claims, with no independently observed read or action.",
+    "limitations": [
+      "Other posts already gave the Nevada result; the first selected post is a candidate precursor, not the only possible origin.",
+      "The later Nevada answer could have been independently calculated or received through another route.",
+      "Kentucky caching is self-reported; underlying task performance and actual memory contents are unavailable."
+    ],
+    "relations": [
+      {
+        "source_revision_id": "dse~DataUSAGrocerySequenceCollabOct22@11",
+        "target_revision_id": "dse~DataUSAGrocerySequenceCollab2027@7",
+        "status": "inferred",
+        "edge_type": "preparation_claim",
+        "shared_tokens": ["Nevada/NV", "35m14s"],
+        "rationale": "The later added text says 'Your confirmed NV lets us prepare' and repeats the earlier 35m14s timing. This is an observed preparation claim, but its precise precursor is ambiguous because other intervening posts reported Nevada."
+      },
+      {
+        "source_revision_id": "dse~DataUSAGrocerySequenceCollabOct22@11",
+        "target_revision_id": "dse~DataUSAGrocerySequenceCollab2027@15",
+        "status": "inferred",
+        "edge_type": "claimed_answer_reuse",
+        "shared_tokens": ["Nevada", "20,369"],
+        "rationale": "A later handle reports Nevada and an instant answer of 20,369, 1,226 publisher-clock seconds after the selected post. The preceding preparation message supports a candidate relay; shared tasks and other sources prevent a causal conclusion."
+      }
+    ]
+  },
+  {
+    "id": "sandbox-reproduction-claim",
+    "include_automatic_edges": false,
+    "title": "Technique relay: a posted method and two named reproduction claims",
+    "revision_ids": [
+      "dse~OAIEquityDec30Raw@4",
+      "dse~OECDJun26PrecisionScout@14",
+      "dse~OECDJun26PrecisionScout@15"
+    ],
+    "interpretation": "A source handle published a method and visual-result evidence. Two later revisions attributed reproductions to 'Dec30'; the second explicitly claimed it saw the report. This provides observable attribution and claimed reuse across pages, not independently verified execution.",
+    "limitations": [
+      "The attribution uses the shorter name 'Dec30'; mapping it to the selected source uses matching page, method and result details rather than a cryptographic identity.",
+      "The corpus contains the writers' claims but no independent terminal logs, responses or screenshots for these attempts.",
+      "Methods appearing in these source messages are historical untrusted text and are never executed or fetched by the application."
+    ],
+    "relations": [
+      {
+        "source_revision_id": "dse~OAIEquityDec30Raw@4",
+        "target_revision_id": "dse~OECDJun26PrecisionScout@14",
+        "status": "observed",
+        "edge_type": "textual_reproduction_attribution",
+        "shared_tokens": ["Dec30 attribution", "9.694057", "posted technique"],
+        "rationale": "The later text explicitly says 'Dec30's ... works exactly' and claims reproduction of the matching method and raw value. Attribution is observed in text; matching Dec30 to OAIEquityDec30Raw is a curated contextual interpretation, not authenticated identity or verified execution."
+      },
+      {
+        "source_revision_id": "dse~OAIEquityDec30Raw@4",
+        "target_revision_id": "dse~OECDJun26PrecisionScout@15",
+        "status": "observed",
+        "edge_type": "textual_reproduction_attribution",
+        "shared_tokens": ["Dec30 attribution", "posted technique"],
+        "rationale": "The later text says it saw Dec30's report and independently reproduced the matching method. The statement is observable, but receipt and execution are solely self-reported; neither is independently verified."
+      }
+    ]
+  },
+  {
+    "id": "independent-sequence-agreement",
+    "title": "Ambiguous control: shared sequence with an explicit independence claim",
+    "revision_ids": [
+      "dse~DataUSAStateSequenceCollab2027@1",
+      "dse~DataUSAStateSequenceCollab2027@2"
+    ],
+    "interpretation": "Two handles post the same four-state sequence within 163 publisher-clock seconds, but the second calls its observation independent. Identical task structure can produce shared content without adopted instructions. This case is deliberately not counted as demonstrated transmission.",
+    "limitations": [
+      "An independence claim is not verified independence; it is a reason to preserve uncertainty.",
+      "The later author could have read the earlier page, but that cannot be inferred merely from the shared sequence."
+    ],
+    "relations": []
+  }
+]

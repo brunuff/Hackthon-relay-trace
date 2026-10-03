@@ -15,8 +15,7 @@ Repository: https://github.com/brunuff/Hackthon-relay-trace
 ## Try the demo
 
 Download this repository as a ZIP, extract it, and open `RelayTrace_demo.html`.
-It works offline and
-contains a small, real, attributed snapshot from the public Collusion.wiki
+It works offline and contains a small, real, attributed snapshot from the public Collusion.wiki
 export. No installation, API key or model call is required.
 
 You can also open `web/index.html`. Search, filter by episode, handle, relation
@@ -103,7 +102,7 @@ event or establish that an unrelated later agent adopted its collective goal.
 ## Submission materials
 
 - `docs/SUBMISSION.md`: project description, demo walkthrough and remaining
-  registration/publication inputs.
+  registration/submission inputs.
 - `docs/RESEARCH.md`: current official schedule, forms, source links and data
   access conditions.
 - `WORKFLOW.md`: work ownership, research contract and release gates.

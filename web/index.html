@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>RelayTrace · Evidence workbench</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="snapshot.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand"><span class="brand-symbol" aria-hidden="true">◈</span><div><strong>RelayTrace</strong><span class="brand-subtitle">Evidence workbench</span></div></div>
+    <div class="header-actions"><span class="offline-badge"><span aria-hidden="true">●</span> Local analysis</span><button id="theme-button" class="icon-button" aria-label="Switch color theme" title="Switch color theme">◐</button><label class="button import-button" for="file-input">Open evidence JSON</label><input id="file-input" type="file" accept=".json,application/json" hidden></div>
+  </header>
+  <main class="app-shell">
+    <section class="intro" aria-labelledby="intro-title">
+      <div><p class="eyebrow">PUBLIC ARTIFACTS · TRACEABLE CLAIMS</p><h1 id="intro-title">Follow the evidence.</h1><p class="intro-copy">Explore connections between records, inspect their sources, and separate a recorded relation from causal uptake.</p></div>
+      <div id="dataset-badge" class="dataset-badge">Loading snapshot</div>
+    </section>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <section class="dataset-card" aria-label="Dataset summary"><div class="dataset-summary"><span class="eyebrow">CURRENT DATASET</span><h2 id="dataset-title">Loading</h2><p id="dataset-context"></p></div><div class="metrics"><div><strong id="event-count">0</strong><span>records</span></div><div><strong id="edge-count">0</strong><span>relations</span></div><div><strong id="handle-count">0</strong><span>handles</span></div><div><strong id="page-count">0</strong><span>pages</span></div></div></section>
+    <div class="workbench">
+      <aside class="filters" aria-label="Explore and filter records">
+        <div class="filter-heading"><h2>Explore</h2><button id="reset-button" class="text-button">Reset</button></div>
+        <label class="field-label" for="search-input">Search records</label><div class="search-wrap"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Claim, phrase, artifact…" autocomplete="off"></div>
+        <label class="field-label" for="episode-select">Episode</label><select id="episode-select"><option value="">All episodes</option></select>
+        <label class="field-label" for="status-select">Relation evidence</label><select id="status-select"><option value="">All statuses</option><option value="observed">Observed</option><option value="inferred">Inferred</option><option value="unknown">Unknown</option></select>
+        <label class="field-label" for="type-select">Relation type</label><select id="type-select"><option value="">All types</option></select>
+        <label class="field-label" for="actor-select">Handle <span class="label-note">not identity</span></label><select id="actor-select"><option value="">All handles</option></select>
+        <label class="field-label" for="page-select">Page</label><select id="page-select"><option value="">All pages</option></select>
+        <div class="date-fields"><div><label class="field-label" for="date-from">From (UTC)</label><input id="date-from" type="date"></div><div><label class="field-label" for="date-to">Through (UTC)</label><input id="date-to" type="date"></div></div>
+        <details class="coverage" open><summary>What this can establish</summary><p>Observed means an explicit textual reference and shared artifact are present in the records. Inferred means a candidate connection. Unknown means the evidence is insufficient.</p><p>Handles do not establish individual agent identity. A reference, matching artifact, or reuse claim alone does not prove reading, goal adoption, or causal influence.</p></details>
+        <details class="coverage"><summary>Dataset coverage & provenance</summary><ul id="limitations-list"></ul><div id="dataset-provenance"></div></details>
+      </aside>
+      <section class="results-panel" aria-label="Matching evidence">
+        <div class="result-toolbar"><div class="view-tabs" role="tablist" aria-label="Evidence view"><button id="relations-tab" class="tab active" role="tab" aria-selected="true">Relations</button><button id="posts-tab" class="tab" role="tab" aria-selected="false">Records</button></div><select id="sort-select" aria-label="Sort matching evidence"><option value="oldest">Earliest first</option><option value="newest">Latest first</option><option value="strength">Evidence status</option></select></div>
+        <div id="episode-context" class="episode-context" hidden></div>
+        <div class="result-info"><span id="result-count" aria-live="polite">Loading evidence</span><span id="time-range"></span></div>
+        <div id="results" class="results"></div><button id="more-button" class="button more-button" hidden>Show more</button>
+      </section>
+      <section id="detail-panel" class="detail-panel" aria-label="Selected record and underlying evidence"><div class="empty-detail"><span class="empty-symbol" aria-hidden="true">⌁</span><h2>Inspect a connection</h2><p>Select a relation or record to read its evidence and provenance.</p></div></section>
+    </div>
+    <footer><span>Source excerpts are untrusted research material. Inspect them as evidence.</span><span>Works offline · File imports stay in this browser</span></footer>
+  </main>
+</body>
+</html>
