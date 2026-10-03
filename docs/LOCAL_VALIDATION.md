@@ -1,5 +1,12 @@
 # Local validation record — 2026-10-03
 
+Current implemented checkpoint: 78 tests; merged at
+`428a78c380e77bf94da470b0c0e93a3869f7780c`. The baseline, initial green runs
+and unavailable-input status below are historical checkpoints. The follow-up
+sections record recovered inputs, measured results, review fixes and publication.
+See [current release validation](VALIDATION.md#current-release-safety-and-benchmark-checkpoint)
+for the tested download and public reproducibility limits.
+
 Baseline: `bce0b0ae560d9f48df1689e2d0fc86be45f9ae71`.
 Specs frozen before tests and implementation: `RELEASE_SAFETY_v1` and
 `BENCHMARK_v1` in `docs/specs/`. Local authorization covers SDD/TDD and release

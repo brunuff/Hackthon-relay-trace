@@ -12,35 +12,87 @@ Built for the October 3–4, 2026 AI Swarm Dynamics Hackathon.
 
 Repository: https://github.com/brunuff/Hackthon-relay-trace
 
-## Try the demo
+## Try the demo in two minutes
 
-Download this repository as a ZIP, extract it, and open `RelayTrace_demo.html`.
-It works offline and contains a small, real, attributed snapshot from the public Collusion.wiki
-export. No installation, API key or model call is required.
+[Download the tested ZIP](https://github.com/brunuff/Hackthon-relay-trace/archive/428a78c380e77bf94da470b0c0e93a3869f7780c.zip)
+(code revision `428a78c`). Extract it and open **`RelayTrace_demo.html`** in a
+browser. It works offline with ten public Collusion records and six relations;
+no installation, API key or model call is required.
 
-You can also open `web/index.html`. Search, filter by episode, handle, relation
-type or evidence status, and select a relation to inspect both records and
-their source provenance. The JSON import operates locally in your browser.
+1. Under **Episode**, choose **Answer relay: preparation, instant-answer claim, and cached Kentucky result**.
+2. Set **Relation evidence** to **Observed**, then click **Recorded acknowledgement**.
+3. Compare the two records, expand **Source provenance**, and read **What is established**. The display shows an 89 ±2 second publisher-clock gap; receipt and causal uptake remain unverified.
 
-## Reproduce the analysis
+You can also open `web/index.html`, switch to **Records**, and search `34,770`
+to find the two Kentucky contributions. JSON imports stay local in your browser.
 
-Requires Python 3.10 or later; the pipeline uses only the standard library.
-Run from the project directory:
+## What the extraction comparison found
+
+On a selected held-out prefix, comparing cumulative snapshots with change-only
+text removed many candidates caused by inherited page content:
+
+| Extraction | Candidate pairs | Inherited-content attribution contradicted | Unresolved |
+|---|---:|---:|---:|
+| Full cumulative snapshots | 130 | 126 | 4 |
+| Added/replaced lines | 4 | 0 | 4 |
+| Introduced tokens | 4 | 0 | 4 |
+
+**Limits:** this is a biased selection of 64 records from 32 held-out pages,
+with candidates on seven pages. Of the 126 contradicted attribution candidates,
+**120 come from one page**. Labels are **AI-assisted and unblinded**; no
+supported positives were found. The whole-group selection exceeded the planned
+30–50-pair target. The four remaining candidates share public reference links
+and remain unresolved. Recall and change-only precision are undefined; this is
+not an accuracy result or a claim of general superiority, causal transmission
+or absence of reading/reuse. [Protocol, hashes and reproducibility limits](docs/VALIDATION.md#current-release-safety-and-benchmark-checkpoint).
+
+<details>
+<summary>Public demo screenshot</summary>
+
+![Reviewed Collusion demo showing the Kentucky acknowledgement, underlying records and explicit evidence limits](docs/images/demo-desktop.png)
+
+Historical real-browser screenshot of the same hash-pinned public snapshot.
+
+</details>
+
+## Reproduce the public checks
+
+Requires Python 3.10+; the pipeline uses only the standard library. In the
+extracted tested revision, run:
 
 ```sh
-PYTHONPATH=src python3 -m swarm_tracer acquire
-PYTHONPATH=src python3 -m swarm_tracer build
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+node --check web/app.js
+node --check web/snapshot.js
 python3 build_release.py
 ```
 
-Acquisition downloads only the fixed publisher export files, never URLs
-embedded in agent text. Build verifies data integrity, normalizes contributions
-between revisions, generates candidate relations and selects the curated
-episodes. The release builder produces a standalone HTML demo and source ZIP
-under `artifacts/`.
+The tested code has **78 passing Python tests**. Node is needed only for the
+JavaScript checks and the application's DOM harness. The release builder uses
+the bundled approved snapshot and produces a standalone demo and a 44-file
+source ZIP under `artifacts/`.
 
-The original bulk export is not included in the release. Source links and
-hashes are retained so another researcher can acquire and verify it.
+To rebuild curated analysis and the frozen candidate union from public inputs:
+
+```sh
+PYTHONPATH=src python3 -m swarm_tracer acquire
+PYTHONPATH=src python3 -m swarm_tracer build --out artifacts/rebuilt-evidence.json
+PYTHONPATH=src python3 -m swarm_tracer.benchmark \
+  --raw-dir data/raw --out artifacts/benchmark-candidates.json
+```
+
+Acquisition fetches four fixed official exports, never URLs in agent text.
+Compare their hashes with [the validation record](docs/VALIDATION.md). A new
+retrieval time changes rebuilt snapshot bytes, so the rebuild is saved separately
+from the approved public demo. Candidate output refuses an existing destination;
+use a new filename for a rerun. The source files must match the recorded hashes
+to reproduce this selection and report digest.
+
+The candidate union is reproducible; the private AI-assisted review packet is
+not shipped, so the reported adjudication labels and metrics cannot be fully
+recreated from the public repository alone. No raw bulk export or private AI
+Village evidence is included. Separate data rights and terms apply; see
+[DATA_NOTES.md](DATA_NOTES.md).
 
 ## Evidence semantics
 
@@ -197,4 +249,4 @@ accepts a review with that exact report hash and one label per candidate,
 including reviewer, rationale and origin (`automated`, `AI-assisted`, `human`).
 It reports unresolved coverage separately and never counts unresolved pairs as
 negatives. Union recall is not corpus recall. See the [local validation
-record](docs/LOCAL_VALIDATION.md) for actual results and unrun research work.
+record](docs/LOCAL_VALIDATION.md) for actual results, historical checkpoints and remaining research work.
