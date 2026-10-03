@@ -2,7 +2,8 @@
 
 On October 3, 2026, the project owner supplied the publisher's schema,
 manifest, changelog, example, compressed agent table, chat table, memory crop
-with selection report, and rendered transcript for local analysis.
+with selection report, and rendered transcript for local analysis. Two further
+recipient-memory crops and their selection reports arrived later that day.
 These source files remain outside the public repository and release archive.
 These are input checks, not transmission findings.
 
@@ -15,6 +16,8 @@ agent metadata entries and zero behavioral records or relations. The supplied
 chat table also imports successfully. The actual 146-row memory crop also
 imports successfully with no automatically inferred relations. Session/turn
 support remains tested against synthetic fixtures until those actual rows arrive.
+Both additional crops import successfully: 28 and nine memory rows, preserving
+their boundary snapshots and UUID attribution. The importer emits no relations.
 
 ## Checks performed on actual supplied data
 
@@ -32,6 +35,8 @@ support remains tested against synthetic fixtures until those actual rows arrive
 | Chat identities | All agent speaker IDs resolve to the supplied agent registry |
 | Memory crop | 146 unique rows; all raw line hashes match the supplied selection report |
 | Memory selection roles | 140 in-window, three preceding, three following |
+| Additional recipient-memory crops | 28 and nine unique rows; all 37 raw line hashes and metadata match their reports |
+| Additional crop boundaries | Each report contains one preceding and one following snapshot; all selected roles agree with the requested timestamps |
 | Rendered transcript | 375,426 events in 404 day groups; lacks source row IDs and agent UUIDs |
 | Other raw behavioral tables | Full memory table, events table, sessions and turns not yet retrieved |
 
@@ -57,6 +62,10 @@ as validation limits.
 | Compressed memory crop | `20246eec0ae198c02bb846afa8e8e909b1c80eff4d2257f242ac7c061cdcbe46` |
 | Memory selection report | `27b17aae4758416da17ca8498696d5ff60bdf412ad852e64f35d6447e35e727a` |
 | Rendered transcript | `d29760ff9f15603d0dd64570884e5cb2126d1d1bb033b2c621134a65b58a6ee0` |
+| March recipient crop | `d8d9d8ba654fa34684f22f0112e1c685e1f937c43c123a4b3fd71037af755f71` |
+| March selection report | `5c1de5655649a48ceecc476ab6210eeec4e980dbd7ce5c70b1cf0014a3739dcb` |
+| August recipient crop | `e3d98ad78a08e7352e1b26914ba7f051070b8f09428ad6e19d0a4cb57216bfe0` |
+| August selection report | `b93589620dcf077e625ab161ba6c577586023d97f2d8f57f3fe98a4422013acb` |
 
 The memory crop helper is original project code. Its synthetic checks cover
 unsorted rows, boundary ties, inclusive/exclusive timestamps, UTC offsets,
@@ -66,9 +75,26 @@ The calendar preset's three exact labels resolve to three distinct UUIDs in
 the supplied agent registry. The user ran the extraction locally; all 146
 supplied selected rows agree with the report's IDs, agent IDs, timestamps and
 source-line hashes. This verifies crop/report consistency, not full-source
-authenticity. All 114 memory-review excerpts were independently checked at
-their exact character offsets. The reviewed content and source excerpts are
+authenticity. All 114 initial memory-review excerpts were independently checked
+at their exact character offsets. The reviewed content and source excerpts are
 not included in the public repository or demo.
+
+For the two additional crops, all four user-declared file hashes match. All
+37 selected raw lines, row IDs, agent IDs and created/updated timestamps agree
+with their sidecars. Selection roles agree with the requested inclusive-start,
+exclusive-end windows. Each crop includes the reported boundary context, and
+both reimport without a later-update warning or automatically inferred edge.
+All 50 additional memory-review spans match their exact source-field offsets
+and field/excerpt hashes. Exact prefix comparisons distinguish carried text
+from new appended sections; rewritten snapshots are reviewed separately.
+Global completeness and nearest-boundary claims still depend on the producer's
+full-source scan report; a crop alone cannot verify them. The reported full-file
+hash/size/count agree across crops but have not been independently checked here.
+The sidecars retain an outdated request-era sentence saying the new memories
+are absent. The received bytes supersede that sentence; original attachments
+remain unchanged. Private review compares complete snapshots, appended sections
+and rewritten sections separately rather than treating every repeated block as
+new retention.
 
 The viewer now distinguishes known record chronology from transport direction.
 An explicitly reviewed undirected association can have ordered record

@@ -1,8 +1,8 @@
 # Release validation
 
 Checked on October 3, 2026. The public-data MVP is published at
-https://github.com/brunuff/Hackthon-relay-trace. External registration and form
-submission remain separate steps requiring participant details.
+https://github.com/brunuff/Hackthon-relay-trace. Registration and the project
+form have been submitted; the submitted narrative remains unchanged.
 
 ## Real evidence snapshot
 
@@ -72,11 +72,16 @@ goal transmission or the cause of the July Hugging Face swarm's ending.
 ## AI Village adapter checkpoint
 
 The schema-grounded local importer adds 21 synthetic tests; the memory-crop
-helper adds seven boundary/transfer checks. All 51 repository
+helper adds seven boundary/transfer checks, and the literal citation audit adds
+11 source-span checks. All 62 repository
 tests pass. A CLI import of the actual supplied manifest and agent table
 loads 46 agent metadata entries and emits zero behavioral records or relations.
-The real chat table is now validated privately; memories, sessions, and turns
-remain pending. The crop helper has not yet processed a real memory archive.
+The real chat table, an initial 146-row memory crop and two additional crops
+containing 28 and nine rows are validated privately. All 183 crop rows import
+with UUID attribution and zero automatically inferred relations. The full
+memory file is not available in this workspace; producer-reported full-file
+fingerprints and global boundary completeness remain unverified here. Actual
+session and turn rows remain pending.
 
 The regenerated demo passes nine real-browser checks with no page errors or
 HTTP requests. The added check verifies that a source documentation URL does
@@ -86,6 +91,6 @@ processed output, and has no duplicate entries.
 
 The curated Collusion evidence snapshot retains the SHA-256 above. The current
 standalone demo SHA-256 is
-`96a5fff7d8ead0c3c10932314316db29598fff2aa81281299ed9b627dd220627`.
+`5ec16f52d1db92d8a52c76d428b5db0d18ba9c709844c49dc53817c58f9ecb3b`.
 See `AI_VILLAGE_VALIDATION.md` for metadata fingerprints and the distinction
 between actual metadata checks and synthetic behavioral-table tests.

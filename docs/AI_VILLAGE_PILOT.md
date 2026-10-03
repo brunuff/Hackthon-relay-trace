@@ -1,6 +1,6 @@
 # AI Village pilot protocol
 
-Status on 2026-10-03: the project owner supplied the schema, manifest, changelog, example, agent table, full chat table, a 146-row memory crop with selection report, and a rendered transcript. The memory crop has been validated and reviewed locally; the case report and source excerpts remain private. The full memory-table bytes have not been retrieved or independently verified. The rendered transcript supplies event context but lacks raw table IDs and computer-use turns. This public protocol reports no new transmission finding. See [the input checklist](AI_VILLAGE_INPUTS.md) and [metadata validation](AI_VILLAGE_VALIDATION.md).
+Status on 2026-10-03: the project owner supplied the schema, manifest, changelog, example, agent table, full chat table, a 146-row memory crop with selection report, a rendered transcript, and two additional recipient-memory crops containing 28 and nine rows. All three memory crops have been validated locally; case reports and source excerpts remain private. The full memory-table bytes have not been retrieved or independently verified in this workspace. The rendered transcript supplies event context but lacks raw table IDs and computer-use turns. This public protocol reports no new transmission finding. See [the input checklist](AI_VILLAGE_INPUTS.md) and [metadata validation](AI_VILLAGE_VALIDATION.md).
 
 ## Question
 

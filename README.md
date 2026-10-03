@@ -113,8 +113,10 @@ flags and preserve those context records; otherwise new-memory claims lack
 their requested comparison. Current row content can reflect later updates,
 which remain explicit in provenance.
 
-The chat table and a 146-row memory crop have been supplied and validated
-locally. The reviewed case remains private. If the full memory archive is too large to transfer, use the standalone local
+The chat table, a 146-row memory crop and two additional recipient crops
+containing 28 and nine memories have been supplied and validated locally.
+Reviewed cases remain private. If the full memory archive is too large to
+transfer, use the standalone local
 filter (Python 3.10+, no extra packages):
 
 ```sh
