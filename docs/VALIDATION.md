@@ -71,10 +71,12 @@ goal transmission or the cause of the July Hugging Face swarm's ending.
 
 ## AI Village adapter checkpoint
 
-The schema-grounded local importer adds 21 synthetic tests. All 44 repository
+The schema-grounded local importer adds 21 synthetic tests; the memory-crop
+helper adds seven boundary/transfer checks. All 51 repository
 tests pass. A CLI import of the actual supplied manifest and agent table
 loads 46 agent metadata entries and emits zero behavioral records or relations.
-Real chat, memory, session, and turn rows have not been supplied.
+The real chat table is now validated privately; memories, sessions, and turns
+remain pending. The crop helper has not yet processed a real memory archive.
 
 The regenerated demo passes nine real-browser checks with no page errors or
 HTTP requests. The added check verifies that a source documentation URL does

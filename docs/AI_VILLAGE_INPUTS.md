@@ -5,8 +5,8 @@ Its SHA-256 is `50f27bda7b862723b8d47d7f7652a6b1c0e0ce9d7c5db572252da4d886bd9903
 This supports implementation against the documented columns. The owner also
 supplied a manifest identifying an export at `2026-09-20T13:05:12.097Z`, the
 agent table, changelog, and example. See [metadata validation](AI_VILLAGE_VALIDATION.md).
-The source repository commit is still unknown, and behavioral rows are not
-yet available.
+The source repository commit is still unknown. The chat table has since been
+supplied and checked locally; memory and action tables remain pending.
 The supplied schema itself is not redistributed in this repository.
 
 ## Small files received
@@ -25,8 +25,8 @@ a schema hash is not a substitute for an export identifier.
 
 ## First real trace
 
-Provide `chat_messages.jsonl.gz` and `agent_memories.jsonl.gz` first, with
-`events.jsonl.gz` when available. Chat and memories let us inspect a shared
+`chat_messages.jsonl.gz` has been supplied. Provide `agent_memories.jsonl.gz`
+next, with `events.jsonl.gz` when available. Chat and memories let us inspect a shared
 statement and later recorded retention. Events supply canonical event order,
 chat cross-references, and consolidation context. Compare duplicate chat
 content across the two tables and expose conflicts or missing references.
@@ -51,6 +51,45 @@ obtain wider memory context before adjudicating newly retained content.
 Add the small `village_goals.jsonl.gz` and `agent_goals.jsonl.gz` before
 interpreting a candidate transfer. Shared goals can independently explain
 similar language or behavior.
+
+## When the memory archive is too large
+
+The standalone `crop_ai_village_memories.py` reads the local archive in one
+pass and does not authenticate, download, or upload anything. It needs Python
+3.10+ and no additional packages. On a computer, place it alongside the source
+memory and agent files and run:
+
+```sh
+python3 crop_ai_village_memories.py agent_memories.jsonl.gz \
+  --agents agents.jsonl.gz --calendar-pilot
+```
+
+The calendar preset selects exact export labels Claude Opus 4.7, DeepSeek-V3.2,
+and Gemini 3.1 Pro, resolving them to UUIDs from the supplied agent registry.
+It uses `2026-06-01T17:00:00Z <= created_at < 2026-06-02T21:00:00Z`. Labels are
+export metadata, not evidence of a historical model version. Missing or
+ambiguous labels cause an error; the generic `--agent-id`, `--start`, and
+`--end` options can select other validated entities and windows.
+
+The helper produces `agent_memories-pilot.jsonl.gz` and
+`agent_memories-pilot.jsonl.gz.selection.json` beside its input. Transfer only
+those two files for local analysis. Their actual sizes are reported at
+completion; no particular size or runtime is promised for an unseen source.
+Keep both outputs out of the public repository and release.
+
+The selection includes every memory in the interval and each selected agent's
+nearest preceding/following snapshots, including ties. It scans the entire
+source to handle unsorted rows, validates gzip completion, hashes the source
+compressed bytes, and preserves selected JSON bytes and original row positions
+in the report. Existing output files are refused. Missing boundaries are
+reported. A default 10,000-row output limit prevents an accidentally broad crop.
+
+**Import the crop separately without date filters**, supplying the agent
+registry. The importer will sort by creation time; crop-file order is not
+canonical event order. The report ties each cropped row back to the original
+source hash and position. Preserve `updated_at` warnings: a nearest preceding
+row can still contain later-edited content and cannot by itself prove a
+historical memory baseline.
 
 ## Action evidence after selecting a candidate
 

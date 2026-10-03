@@ -1,15 +1,17 @@
-# AI Village metadata validation
+# AI Village input validation
 
 On October 3, 2026, the project owner supplied the publisher's schema,
-manifest, changelog, example, and compressed agent table for local analysis.
+manifest, changelog, example, compressed agent table, and chat table for local analysis.
 These source files remain outside the public repository and release archive.
-This is a metadata check, not a transmission finding.
+These are input checks, not transmission findings.
 
 The local importer is implemented with 21 clearly synthetic adapter tests.
-All 44 repository tests pass, including the existing viewer/data-boundary
+The memory crop helper adds seven synthetic boundary/transfer tests.
+All 51 repository tests pass, including the existing viewer/data-boundary
 checks. A CLI import of the actual supplied agents and manifest produces 46
-agent metadata entries and zero behavioral records or relations. Behavioral
-table support remains tested against synthetic fixtures until actual rows arrive.
+agent metadata entries and zero behavioral records or relations. The supplied
+chat table also imports successfully. Memory/session/turn support remains
+tested against synthetic fixtures until those actual rows arrive.
 
 ## Checks performed on actual supplied data
 
@@ -23,11 +25,14 @@ table support remains tested against synthetic fixtures until actual rows arrive
 | Export-only URL fields | Both URL fields listed as dropped are absent |
 | Timestamp precision | Supplied values include fractional seconds of differing lengths |
 | Repository revision | Not supplied; unknown |
-| Behavioral tables | Not yet supplied |
+| Chat rows | 183,485 unique IDs; matches the manifest |
+| Chat identities | All agent speaker IDs resolve to the supplied agent registry |
+| Other behavioral tables | Memories, events, sessions, and turns not yet supplied |
 
 The manifest reports 183,485 chat messages, 246,151 memories, 381,610 events,
 78,362 computer-use sessions, and 2,510,487 turns. These are expected export
-counts, not counts independently validated against those files. The schema's
+counts. Chat has now been independently validated; other table counts have
+not been checked against those files. The schema's
 approximate table sizes are older than this manifest; do not hard-code them
 as validation limits.
 
@@ -40,6 +45,14 @@ as validation limits.
 | Compressed agents | `b7af5dd3bed6f58d0f7627706b103bdba387ed678d6ac9caf5f084799dec0350` |
 | Changelog | `65cac86a5ace6442879331ca7aadc7a46d4c77f7dd59979865cce708661e63d5` |
 | Example | `af38b153448e4ff73fba44ae5b35c6c73d0de1ec964439ace9008d477d070a3c` |
+| Compressed chat | `c1d56ab7b437f65c985c3353697d92f668f3a7b83776913aa5e3eb93ed867bb7` |
+
+The memory crop helper is original project code. Its synthetic checks cover
+unsorted rows, boundary ties, inclusive/exclusive timestamps, UTC offsets,
+missing context, compressed/plain inputs, corrupt gzip, selected-row limits,
+overwrite refusal, ambiguous labels, and reimported mutation warnings.
+The calendar preset's three exact labels resolve to three distinct UUIDs in
+the supplied agent registry. Actual memory extraction has not yet been run.
 
 The publisher's example was read without execution. It operates on the
 rendered transcript and does not validate raw table joins or memory exposure.
@@ -63,4 +76,4 @@ version. Memories cannot be joined directly to sessions or consolidation
 events because the schema supplies no such foreign key.
 
 Attribution: AI Digest / AI Village, publisher-supplied export documentation
-and agent registry. Dataset: https://huggingface.co/datasets/aidigestorg/ai-village.
+agent registry, and chat export. Dataset: https://huggingface.co/datasets/aidigestorg/ai-village.

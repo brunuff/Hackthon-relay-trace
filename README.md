@@ -90,10 +90,10 @@ executed.
 ## AI Village local importer
 
 The optional adapter now follows the supplied AI Village column schema and
-has been checked against the supplied agent registry and manifest. It uses
+has been checked against the supplied agent registry, manifest, and chat table. It uses
 UUID identity links and preserves source row/file hashes. Synthetic tests
 cover chat, memory snapshots, session intentions, executed actions,
-provider-shaped responses, and tool outputs. No behavioral AI Village rows or
+provider-shaped responses, and tool outputs. No restricted AI Village rows or
 transmission findings are included in this release.
 
 Put approved local tables under `data/raw/ai-village/`, then run:
@@ -113,7 +113,21 @@ flags and preserve those context records; otherwise new-memory claims lack
 their requested comparison. Current row content can reflect later updates,
 which remain explicit in provenance.
 
-The smallest next inputs are chat and memory tables. Events and goals add
+The chat table has been supplied and validated locally; memories are the next
+input. If the memory archive is too large to transfer, use the standalone local
+filter (Python 3.10+, no extra packages):
+
+```sh
+python3 crop_ai_village_memories.py data/raw/ai-village/agent_memories.jsonl.gz \
+  --agents data/raw/ai-village/agents.jsonl.gz --calendar-pilot
+```
+
+This creates a compressed crop and selection report beside the source file,
+preserving nearest memory snapshots before and after the June 1-2 window.
+The preset resolves exact export-time labels to UUIDs and rejects ambiguity.
+See the [transfer instructions](docs/AI_VILLAGE_INPUTS.md#when-the-memory-archive-is-too-large).
+
+Events and goals add
 context; sessions and turns add action evidence. Event-table importing is not
 implemented yet. See [input requirements](docs/AI_VILLAGE_INPUTS.md),
 [metadata checks](docs/AI_VILLAGE_VALIDATION.md), and
