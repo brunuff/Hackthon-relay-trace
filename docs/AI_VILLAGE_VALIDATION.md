@@ -8,7 +8,8 @@ These are input checks, not transmission findings.
 
 The local importer is implemented with 21 clearly synthetic adapter tests.
 The memory crop helper adds seven synthetic boundary/transfer tests.
-All 51 repository tests pass, including the existing viewer/data-boundary
+The citation audit adds 11 synthetic source-span and literal-data tests.
+All 62 repository tests pass, including the existing viewer/data-boundary
 checks. A CLI import of the actual supplied agents and manifest produces 46
 agent metadata entries and zero behavioral records or relations. The supplied
 chat table also imports successfully. The actual 146-row memory crop also
@@ -77,6 +78,13 @@ unresolved associations, invalid/reversed/equal times and uncertainty overlap.
 
 The publisher's example was read without execution. It operates on the
 rendered transcript and does not validate raw table joins or memory exposure.
+
+The original [citation checker](TRANSCRIPT_CITATION_AUDIT.md) also ran on the
+actual supplied rendered transcript. Its two explicit citation shapes were
+checked against real source/answer spans. Coverage is limited to recognized
+literal quotations; unresolved candidates are not automatically incorrect.
+Source excerpts and the audit output remain private. It does not establish
+causal transmission or infer session/UUID joins.
 
 ## Implications for the initial pilot
 

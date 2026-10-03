@@ -141,6 +141,14 @@ implemented yet. See [input requirements](docs/AI_VILLAGE_INPUTS.md),
 [metadata checks](docs/AI_VILLAGE_VALIDATION.md), and
 [the pilot protocol](docs/AI_VILLAGE_PILOT.md).
 
+The standalone [literal citation audit](docs/TRANSCRIPT_CITATION_AUDIT.md)
+checks quoted history-answer lines against the supplied transcript, preserving
+source/answer spans, ambiguity and recorded clocks. It helps review a source,
+returned summary and later response alongside prior recipient statements and
+direct corrections. A literal match establishes textual correspondence; receipt
+and causal uptake remain unverified. Its outputs can contain restricted excerpts
+and must stay private.
+
 ## Next research step
 
 With approved AI Village access, extend the same evidence model to connect a
