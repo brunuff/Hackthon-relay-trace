@@ -6,7 +6,11 @@ This supports implementation against the documented columns. The owner also
 supplied a manifest identifying an export at `2026-09-20T13:05:12.097Z`, the
 agent table, changelog, and example. See [metadata validation](AI_VILLAGE_VALIDATION.md).
 The source repository commit is still unknown. The chat table has since been
-supplied and checked locally; memory and action tables remain pending.
+supplied and checked locally. A 146-row memory crop and two additional
+recipient crops of 28 and nine rows have been validated locally; the rendered
+transcript is also available as context. Full memory-table bytes and raw action
+tables remain unverified or pending in this workspace. All crops and case
+reports stay private.
 The supplied schema itself is not redistributed in this repository.
 
 ## Small files received
@@ -26,7 +30,8 @@ a schema hash is not a substitute for an export identifier.
 ## First real trace
 
 `chat_messages.jsonl.gz` has been supplied. Provide `agent_memories.jsonl.gz`
-next, with `events.jsonl.gz` when available. Chat and memories let us inspect a shared
+only if a further approved analysis requires it; the three supplied crops
+already support local memory comparisons. Add `events.jsonl.gz` when available. Chat and memories let us inspect a shared
 statement and later recorded retention. Events supply canonical event order,
 chat cross-references, and consolidation context. Compare duplicate chat
 content across the two tables and expose conflicts or missing references.
@@ -129,6 +134,8 @@ are dumped sequentially from a live database, so count differences and partial
 coverage must be reported rather than concealed with guessed joins.
 
 Keep approved local inputs under `data/raw/ai-village/` and analysis output
-under `data/processed/`. Raw files and non-demo processed output are excluded
-from the release. Do not replace the reviewed public demonstration with
+under an ignored private directory or `data/processed/`. Raw files and non-demo
+processed output are ignored by Git and absent from the exact release allowlist.
+Unexpected paths never enter the release automatically. The builder accepts
+only the hash-approved public Collusion demo, after provenance validation. Do not replace the reviewed public demonstration with
 synthetic fixtures or unreviewed gated records.

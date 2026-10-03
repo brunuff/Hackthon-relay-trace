@@ -5,3 +5,8 @@ data/raw/
 data/processed/*.gz
 artifacts/
 .DS_Store
+
+# Only the reviewed public Collusion demo may be tracked here.
+data/processed/*
+!data/processed/evidence.json
+private/

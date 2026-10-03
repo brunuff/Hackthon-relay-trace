@@ -173,3 +173,28 @@ event or establish that an unrelated later agent adopted its collective goal.
 
 Project concept: Bruno. Implementation and review: AI-assisted, with separate
 data, interface, requirements and independent-review workstreams.
+
+## Local release and benchmark review
+
+`build_release.py` packages exact paths in `APPROVED_FILES` and accepts only
+snapshot bytes approved in `release_policy.json`, with Collusion provenance
+validated before writes. A changed evidence snapshot requires Bruno's review
+and an explicit approval-policy update. Ignore rules help keep non-demo
+processed files private; they do not establish redistribution rights or prevent
+forced Git additions. Keep AI Village crops and audit packets private.
+
+The frozen [benchmark protocol](docs/specs/BENCHMARK_v1.md) compares three
+extraction variants with common matching rules and no curated overrides:
+
+```sh
+PYTHONPATH=src python3 -m swarm_tracer.benchmark \
+  --raw-dir data/raw --out artifacts/benchmark-candidates.json
+```
+
+It requires verified full public source inputs. The report freezes the union
+of candidate pairs, initially unresolved, and its hash. `evaluate_report`
+accepts a review with that exact report hash and one label per candidate,
+including reviewer, rationale and origin (`automated`, `AI-assisted`, `human`).
+It reports unresolved coverage separately and never counts unresolved pairs as
+negatives. Union recall is not corpus recall. See the [local validation
+record](docs/LOCAL_VALIDATION.md) for actual results and unrun research work.
