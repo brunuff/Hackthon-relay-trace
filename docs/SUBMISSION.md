@@ -2,7 +2,8 @@
 
 Status: the implementation and public-data validation are complete. The project
 is published at https://github.com/brunuff/Hackthon-relay-trace. This document
-remains a submission draft; registration and hackathon submission have not occurred.
+contains project reference notes. Bruno Costa's online registration is confirmed;
+the project submission has not occurred.
 
 ## Project title
 
@@ -67,10 +68,11 @@ extension requiring its publisher's manual access approval.
 ## Materials to enter in the form
 
 - Repository URL: https://github.com/brunuff/Hackthon-relay-trace
-- Explanation: use the short description and project detail above.
+- Explanation: Bruno must write the form answer himself; the sections above
+  provide technical facts to check, not text to paste into the form.
 - Demonstration: standalone `RelayTrace_demo.html` in the repository/release.
-- Participant public name: **Bruno; confirm full name for the form**.
-- Participant email: **required from Bruno**.
+- Participant public name: **Bruno Costa**.
+- Participant email: **provided privately for the organizer's form**.
 - Additional human team members: **none identified; confirm if applicable**.
 - Implementation disclosure: AI-assisted work using four independent
   workstreams for data, interface, requirements and review.
@@ -82,7 +84,11 @@ extension requiring its publisher's manual access approval.
 - Logistics: https://swarmchasing.com/logistics/
 - Deadline: Sunday, October 4, 2026, **8 p.m. America/Toronto**.
 
-The official logistics requires a GitHub repository and participants' names
-and emails. The draft is reviewable before any external form submission.
-Field names above describe required inputs, not a verified Airtable
-form schema.
+The live submission form was inspected on October 3, 2026. It requires a short
+write-up or a 2–3 minute video link explaining what was built and how to use it.
+The real-results and notes-for-judges fields are optional. Metadata has been
+prepared in the form, but no project entry has been submitted.
+
+The form explicitly says: "Please write your answers on this form yourself,
+not with AI." It permits AI use for the project, code and video. Bruno should
+compose the narrative form answers himself using verified project facts.
