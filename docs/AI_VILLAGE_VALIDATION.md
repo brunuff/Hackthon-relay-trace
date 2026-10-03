@@ -1,7 +1,8 @@
 # AI Village input validation
 
 On October 3, 2026, the project owner supplied the publisher's schema,
-manifest, changelog, example, compressed agent table, and chat table for local analysis.
+manifest, changelog, example, compressed agent table, chat table, memory crop
+with selection report, and rendered transcript for local analysis.
 These source files remain outside the public repository and release archive.
 These are input checks, not transmission findings.
 
@@ -10,8 +11,9 @@ The memory crop helper adds seven synthetic boundary/transfer tests.
 All 51 repository tests pass, including the existing viewer/data-boundary
 checks. A CLI import of the actual supplied agents and manifest produces 46
 agent metadata entries and zero behavioral records or relations. The supplied
-chat table also imports successfully. Memory/session/turn support remains
-tested against synthetic fixtures until those actual rows arrive.
+chat table also imports successfully. The actual 146-row memory crop also
+imports successfully with no automatically inferred relations. Session/turn
+support remains tested against synthetic fixtures until those actual rows arrive.
 
 ## Checks performed on actual supplied data
 
@@ -27,12 +29,17 @@ tested against synthetic fixtures until those actual rows arrive.
 | Repository revision | Not supplied; unknown |
 | Chat rows | 183,485 unique IDs; matches the manifest |
 | Chat identities | All agent speaker IDs resolve to the supplied agent registry |
-| Other behavioral tables | Memories, events, sessions, and turns not yet supplied |
+| Memory crop | 146 unique rows; all raw line hashes match the supplied selection report |
+| Memory selection roles | 140 in-window, three preceding, three following |
+| Rendered transcript | 375,426 events in 404 day groups; lacks source row IDs and agent UUIDs |
+| Other raw behavioral tables | Full memory table, events table, sessions and turns not yet retrieved |
 
 The manifest reports 183,485 chat messages, 246,151 memories, 381,610 events,
 78,362 computer-use sessions, and 2,510,487 turns. These are expected export
-counts. Chat has now been independently validated; other table counts have
-not been checked against those files. The schema's
+counts. Chat and the memory crop have been independently validated. The
+selection report lists 246,151 full-source memories, but that complete file
+has not been independently checked. The rendered transcript is a separate
+export format; its event count is not the raw events-table count. The schema's
 approximate table sizes are older than this manifest; do not hard-code them
 as validation limits.
 
@@ -46,13 +53,27 @@ as validation limits.
 | Changelog | `65cac86a5ace6442879331ca7aadc7a46d4c77f7dd59979865cce708661e63d5` |
 | Example | `af38b153448e4ff73fba44ae5b35c6c73d0de1ec964439ace9008d477d070a3c` |
 | Compressed chat | `c1d56ab7b437f65c985c3353697d92f668f3a7b83776913aa5e3eb93ed867bb7` |
+| Compressed memory crop | `20246eec0ae198c02bb846afa8e8e909b1c80eff4d2257f242ac7c061cdcbe46` |
+| Memory selection report | `27b17aae4758416da17ca8498696d5ff60bdf412ad852e64f35d6447e35e727a` |
+| Rendered transcript | `d29760ff9f15603d0dd64570884e5cb2126d1d1bb033b2c621134a65b58a6ee0` |
 
 The memory crop helper is original project code. Its synthetic checks cover
 unsorted rows, boundary ties, inclusive/exclusive timestamps, UTC offsets,
 missing context, compressed/plain inputs, corrupt gzip, selected-row limits,
 overwrite refusal, ambiguous labels, and reimported mutation warnings.
 The calendar preset's three exact labels resolve to three distinct UUIDs in
-the supplied agent registry. Actual memory extraction has not yet been run.
+the supplied agent registry. The user ran the extraction locally; all 146
+supplied selected rows agree with the report's IDs, agent IDs, timestamps and
+source-line hashes. This verifies crop/report consistency, not full-source
+authenticity. All 114 memory-review excerpts were independently checked at
+their exact character offsets. The reviewed content and source excerpts are
+not included in the public repository or demo.
+
+The viewer now distinguishes known record chronology from transport direction.
+An explicitly reviewed undirected association can have ordered record
+timestamps; it displays earlier/later records without a transport arrow.
+Synthetic DOM checks cover known chronology with nullable uncertainty,
+unresolved associations, invalid/reversed/equal times and uncertainty overlap.
 
 The publisher's example was read without execution. It operates on the
 rendered transcript and does not validate raw table joins or memory exposure.

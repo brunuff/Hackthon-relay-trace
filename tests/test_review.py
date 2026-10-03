@@ -166,9 +166,42 @@ vm.runInNewContext(fs.readFileSync('web/app.js','utf8'),context,{timeout:2000});
 const detail=document.getElementById('detail-panel').textContent;
 const base={xss:window.__reviewXss||0,dangerousTags:created.filter(n=>['img','script','iframe'].includes(n.tag)).length,dangerousLinks:created.filter(n=>n.tag==='a'&&!/^https?:/.test(n.href||'')).length,numericDateGuessed:detail.includes('2042'),unknownDirectionMislabel:detail.includes('Earlier / source record'),orderUnresolved:detail.includes('Order unresolved')};
 async function importText(text){const target={files:[{size:Buffer.byteLength(text),text:async()=>text}],value:'chosen'};await document.getElementById('file-input').listeners.change({target});return document.getElementById('notice').textContent;}
+function descendants(node){return [node,...node.children.flatMap(child=>typeof child==='string'?[]:descendants(child))];}
+async function chronologyCase(options={}){
+ const source={id:'chat',timestamp:'2026-06-01T12:00:00Z',actor_handle:'Corrector',page:'Chat',text:'The empty days were the weekend.'};
+ const target={id:'memory',timestamp:'2026-06-01T12:02:00Z',actor_handle:'Rememberer',page:'Memory',text:'Corrector identified the weekend explanation.'};
+ if('sourceTime' in options)source.timestamp=options.sourceTime;
+ if('targetTime' in options)target.timestamp=options.targetTime;
+ if('sourceUncertainty' in options)source.timestamp_uncertainty_seconds=options.sourceUncertainty;
+ if('targetUncertainty' in options)target.timestamp_uncertainty_seconds=options.targetUncertainty;
+ const edge={id:'association',source:'chat',target:'memory',status:'observed',directed:false,ordering_status:'known',edge_type:'attributed_memory_correspondence',receipt_observed:false,causal_uptake_observed:false,evidence:[],...options.edge};
+ const notice=await importText(JSON.stringify({dataset:{id:'chronology-review'},events:[source,target],edges:[edge],episodes:[]}));
+ const panel=document.getElementById('detail-panel');
+ const classes=name=>descendants(panel).filter(node=>node.className===name).map(node=>node.textContent);
+ return {notice,error:document.getElementById('notice').className.includes('error'),detail:panel.textContent,results:document.getElementById('results').textContent,labels:classes('post-label'),connectors:classes('connector-label')};
+}
 (async()=>{
  base.malformedError=await importText('{"events": [');
  base.invalidMembersError=await importText(JSON.stringify({events:[null],edges:[]}));
+ base.chronology={
+  knownAttributed:await chronologyCase({sourceUncertainty:null,targetUncertainty:null,edge:{seconds_elapsed:120}}),
+  knownSelf:await chronologyCase({edge:{edge_type:'self_memory_correspondence'}}),
+  knownWithUncertainty:await chronologyCase({sourceUncertainty:30,targetUncertainty:30}),
+  unknownAssociation:await chronologyCase({edge:{ordering_status:'unknown'}}),
+  undeclaredAssociation:await chronologyCase({edge:{ordering_status:null}}),
+  invalidTime:await chronologyCase({sourceTime:'not-a-date'}),
+  invalidCalendar:await chronologyCase({sourceTime:'2026-02-30T12:00:00Z'}),
+  naiveTime:await chronologyCase({sourceTime:'2026-06-01T12:00:00'}),
+  numericTime:await chronologyCase({sourceTime:42}),
+  missingTime:await chronologyCase({targetTime:null}),
+  reversedTime:await chronologyCase({targetTime:'2026-06-01T11:59:00Z'}),
+  equalTime:await chronologyCase({targetTime:'2026-06-01T12:00:00Z'}),
+  overlappingUncertainty:await chronologyCase({sourceUncertainty:60,targetUncertainty:60}),
+  negativeUncertainty:await chronologyCase({sourceUncertainty:-1}),
+  stringUncertainty:await chronologyCase({targetUncertainty:'0'}),
+  legacyDirected:await chronologyCase({edge:{directed:true,ordering_status:null,edge_type:'explicit_reference'}}),
+  invalidDirected:await chronologyCase({sourceTime:'not-a-date',edge:{directed:true}})
+ };
  console.log(JSON.stringify(base));
 })().catch(e=>{console.error(e);process.exitCode=1;});
 """
@@ -184,6 +217,38 @@ async function importText(text){const target={files:[{size:Buffer.byteLength(tex
         self.assertTrue(report["orderUnresolved"])
         self.assertIn("Could not open this file:", report["malformedError"])
         self.assertIn("Could not open this file:", report["invalidMembersError"])
+        cases = report["chronology"]
+        for name in ("knownAttributed", "knownSelf", "knownWithUncertainty"):
+            with self.subTest(chronology=name):
+                case = cases[name]
+                self.assertFalse(case["error"], case["notice"])
+                self.assertEqual(case["labels"], ["Earlier record · textual association", "Later record · textual association"])
+                self.assertIn("Earlier: Corrector · Later: Rememberer", case["results"])
+                self.assertNotIn("Order unresolved", case["detail"])
+                self.assertNotIn("Earlier / source record", case["detail"])
+                self.assertTrue(case["connectors"][0].startswith("Record chronology only · "))
+                self.assertFalse(any(arrow in case["connectors"][0] + case["results"] for arrow in ("→", "↓", "↔")))
+                self.assertIn("They do not establish transport between these records.", case["detail"])
+                self.assertIn("Not established here", case["detail"])
+        self.assertIn("Attributed memory correspondence", cases["knownAttributed"]["detail"])
+        self.assertIn("exact source message, transport route, receipt or causal uptake", cases["knownAttributed"]["detail"])
+        self.assertIn("between recorded timestamps", cases["knownAttributed"]["connectors"][0])
+        self.assertIn("Self memory correspondence", cases["knownSelf"]["detail"])
+        self.assertIn("does not establish that the chat supplied the memory", cases["knownSelf"]["detail"])
+        for name in ("unknownAssociation", "undeclaredAssociation", "invalidTime", "invalidCalendar", "naiveTime", "numericTime", "missingTime", "reversedTime", "equalTime", "overlappingUncertainty", "negativeUncertainty", "stringUncertainty", "invalidDirected"):
+            with self.subTest(chronology=name):
+                case = cases[name]
+                self.assertFalse(case["error"], case["notice"])
+                self.assertEqual(case["labels"], ["Record A · order unresolved", "Record B · order unresolved"])
+                self.assertIn("Order unresolved", case["detail"])
+                self.assertNotIn("Earlier:", case["results"])
+                self.assertNotIn("Earlier / source record", case["detail"])
+                self.assertNotIn("Earlier record · textual association", case["detail"])
+                self.assertNotIn("Record chronology only", case["detail"])
+                self.assertNotIn("→", case["results"])
+        self.assertEqual(cases["legacyDirected"]["labels"], ["Earlier / source record", "Later / target record"])
+        self.assertIn("→", cases["legacyDirected"]["results"])
+        self.assertTrue(cases["legacyDirected"]["connectors"][0].startswith("↓"))
 
 
 if __name__ == "__main__":

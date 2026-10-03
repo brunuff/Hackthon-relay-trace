@@ -58,7 +58,7 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const LABELS = { explicit_reference: 'Explicit reference', shared_artifact: 'Matching artifact', claimed_reuse: 'Recorded claim of reuse', candidate_match: 'Candidate match', textual_acknowledgement:'Recorded acknowledgement', textual_reproduction_attribution:'Recorded reproduction claim', preparation_claim:'Recorded preparation claim', claimed_answer_reuse:'Recorded answer reuse claim', independent_agreement:'Recorded independence claim' };
+  const LABELS = { explicit_reference: 'Explicit reference', shared_artifact: 'Matching artifact', claimed_reuse: 'Recorded claim of reuse', candidate_match: 'Candidate match', textual_acknowledgement:'Recorded acknowledgement', textual_reproduction_attribution:'Recorded reproduction claim', preparation_claim:'Recorded preparation claim', claimed_answer_reuse:'Recorded answer reuse claim', independent_agreement:'Recorded independence claim', self_memory_correspondence:'Self memory correspondence', attributed_memory_correspondence:'Attributed memory correspondence' };
   const ORDER = { observed: 0, inferred: 1, unknown: 2 };
   const PAGE_SIZE = 40;
   let corpus, eventMap, edgeMap, eventSearch, edgeSearch;
@@ -163,11 +163,19 @@
     return !f.query || (edgeSearch.get(edge.id) || '').includes(f.query);
   }
   function itemTime(item) { return view === 'posts' ? item._time : eventMap.get(item.target)?._time ?? eventMap.get(item.source)?._time ?? null; }
-  function hasEstablishedOrder(edge) {
+  function chronologyKind(edge) {
     const source = eventMap.get(edge.source), target = eventMap.get(edge.target);
-    if(edge.directed === false || source?._time === null || target?._time === null || !source || !target) return false;
-    const uncertainty = [source.timestamp_uncertainty_seconds,target.timestamp_uncertainty_seconds].reduce((sum,v) => sum + (typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : 0),0);
-    return target._time - source._time > uncertainty * 1000;
+    if(!source || !target || source._time === null || target._time === null) return 'unresolved';
+    const uncertainties = [source.timestamp_uncertainty_seconds,target.timestamp_uncertainty_seconds];
+    // Null and undefined mean unspecified; malformed supplied values cannot
+    // strengthen a chronology claim. No uncertainty measurement is invented.
+    if(uncertainties.some(v => v !== undefined && v !== null && (typeof v !== 'number' || !Number.isFinite(v) || v < 0))) return 'unresolved';
+    const uncertainty = uncertainties.reduce((sum,v) => sum + (v || 0),0);
+    if(target._time - source._time <= uncertainty * 1000) return 'unresolved';
+    // An undirected textual association can have known record chronology
+    // without establishing transport from the earlier record to the later one.
+    if(edge.directed === false) return edge.ordering_status === 'known' ? 'association' : 'unresolved';
+    return 'directed';
   }
   function render(selectFirst = false) {
     const f = filters(), episode = corpus.episodes.find(e => string(e.id) === f.episode);
@@ -195,10 +203,12 @@
   function select(itemId) { selectedId = itemId; render(); }
   function edgeCard(edge) {
     const source = eventMap.get(edge.source), target = eventMap.get(edge.target);
+    const chronology = chronologyKind(edge), sourceHandle = source?.actor_handle || 'Missing source', targetHandle = target?.actor_handle || 'Missing target';
     const card = el('button','result-card' + (selectedId === edge.id ? ' selected' : ''));
     card.type = 'button'; card.setAttribute('aria-pressed', selectedId === edge.id ? 'true' : 'false'); card.addEventListener('click',() => select(edge.id));
     const top = el('div','card-top'); top.append(statusBadge(edge.status),el('span','card-date',dateLabel(target?.timestamp || source?.timestamp))); card.append(top);
-    card.append(el('div','card-title',readableType(edge.edge_type)),el('div','card-path',(source?.actor_handle || 'Missing source') + (hasEstablishedOrder(edge) ? ' → ' : ' ↔ ') + (target?.actor_handle || 'Missing target')));
+    const path = chronology === 'association' ? 'Earlier: ' + sourceHandle + ' · Later: ' + targetHandle : sourceHandle + (chronology === 'directed' ? ' → ' : ' ↔ ') + targetHandle;
+    card.append(el('div','card-title',readableType(edge.edge_type)),el('div','card-path',path));
     card.append(el('p','card-excerpt',excerpt(edge.rationale || target?.text)));
     const bottom = el('div','card-bottom'); bottom.append(el('span','card-tag',target?.page || source?.page || 'Unknown page'),el('span','',edge.evidence.length + ' evidence ' + (edge.evidence.length === 1 ? 'quote' : 'quotes'))); card.append(bottom);
     return card;
@@ -236,11 +246,15 @@
     const source = eventMap.get(edge.source), target = eventMap.get(edge.target);
     const head = el('div','detail-head'); head.append(el('p','eyebrow','SELECTED RELATION')); const title = el('div','detail-title-row'); title.append(el('h2','',readableType(edge.edge_type)),statusBadge(edge.status)); head.append(title,el('p','',edge.rationale),el('div','detail-id',edge.id)); panel.append(head);
     const flags = section('What is established'); const grid = el('div','evidence-flags'); grid.append(flag('Independent receipt evidence',edge.receipt_observed),flag('Causal uptake or goal adoption',edge.causal_uptake_observed)); flags.append(grid,el('p','note','Relation status describes the textual or artifact link. It does not independently verify the underlying claim.')); panel.append(flags);
-    const ordered = hasEstablishedOrder(edge);
-    const posts = section('Underlying records'); const pair = el('div','source-pair'); pair.append(postBox(source,ordered ? 'Earlier / source record' : 'Record A · order unresolved'));
-    let elapsed = ordered ? 'Later publisher timestamp' : 'Order unresolved · association only';
-    if(ordered && typeof edge.seconds_elapsed === 'number' && Number.isFinite(edge.seconds_elapsed)) elapsed = edge.seconds_elapsed < 120 ? edge.seconds_elapsed + ' seconds between publisher timestamps' : edge.seconds_elapsed < 7200 ? Math.round(edge.seconds_elapsed / 60) + ' minutes between publisher timestamps' : (edge.seconds_elapsed/3600).toFixed(1) + ' hours between publisher timestamps';
-    pair.append(el('div','connector-label',(ordered ? '↓  ' : '↔  ') + elapsed),postBox(target,ordered ? 'Later / target record' : 'Record B · order unresolved')); posts.append(pair);
+    const chronology = chronologyKind(edge), association = chronology === 'association', ordered = chronology !== 'unresolved';
+    const posts = section('Underlying records'); const pair = el('div','source-pair'); pair.append(postBox(source,association ? 'Earlier record · textual association' : ordered ? 'Earlier / source record' : 'Record A · order unresolved'));
+    let elapsed = ordered ? association ? 'Later recorded timestamp' : 'Later publisher timestamp' : 'Order unresolved · association only';
+    if(ordered && typeof edge.seconds_elapsed === 'number' && Number.isFinite(edge.seconds_elapsed)) {
+      const basis = association ? 'recorded timestamps' : 'publisher timestamps';
+      elapsed = edge.seconds_elapsed < 120 ? edge.seconds_elapsed + ' seconds between ' + basis : edge.seconds_elapsed < 7200 ? Math.round(edge.seconds_elapsed / 60) + ' minutes between ' + basis : (edge.seconds_elapsed/3600).toFixed(1) + ' hours between ' + basis;
+    }
+    pair.append(el('div','connector-label',(association ? 'Record chronology only · ' : ordered ? '↓  ' : '↔  ') + elapsed),postBox(target,association ? 'Later record · textual association' : ordered ? 'Later / target record' : 'Record B · order unresolved')); posts.append(pair);
+    if(association) posts.append(el('p','note','Earlier and later describe recorded timestamps only. They do not establish transport between these records.'));
     if(edge.elapsed_basis) posts.append(el('p','note',string(edge.elapsed_basis)));
     if(ordered && typeof edge.elapsed_uncertainty_seconds === 'number' && edge.elapsed_uncertainty_seconds > 0) posts.append(el('p','note','Elapsed-time uncertainty: ±' + edge.elapsed_uncertainty_seconds + ' seconds.'));
     panel.append(posts);
@@ -248,7 +262,7 @@
     if(!edge.evidence.length) quotes.append(el('p','note','No supporting excerpts were supplied.'));
     edge.evidence.forEach((entry,i) => { const container = el('div',''); container.append(el('blockquote','quote',string(entry?.quote)),el('p','quote-meta','Excerpt ' + (i+1) + ' · ' + string(entry?.event_id,'Record not supplied'))); const link = safeLink(entry?.source_url,'Source ↗'); if(link) container.append(link); quotes.append(container); }); panel.append(quotes);
     if(edge.shared_tokens.length) { const tokens = section('Shared artifact strings'); const row = el('div','tokens'); edge.shared_tokens.forEach(t => row.append(el('span','token',string(t)))); tokens.append(row,el('p','note','Matching strings support a connection; they do not establish who read them.')); panel.append(tokens); }
-    const notes = section('Interpretation limits'); notes.append(el('p','note',['claimed_reuse','textual_reproduction_attribution','claimed_answer_reuse','preparation_claim'].includes(edge.edge_type) ? 'This relation contains a recorded claim of reuse or preparation. A claim is not an independently verified action or successful reproduction.' : ['shared_artifact','independent_agreement'].includes(edge.edge_type) ? 'Both records contain a matching artifact. Common prompts, shared sources, quotation, or independent discovery can also produce matches.' : 'An explicit reference may support transmission of information. It does not establish that the later actor adopted a broader goal.'));
+    const notes = section('Interpretation limits'); notes.append(el('p','note',edge.edge_type === 'self_memory_correspondence' ? 'Matching content in an agent’s chat and memory snapshot supports self correspondence. It does not establish that the chat supplied the memory or independently verify receipt or causal uptake.' : edge.edge_type === 'attributed_memory_correspondence' ? 'A named corrector and matching content support textual correspondence. They do not identify the exact source message, transport route, receipt or causal uptake.' : ['claimed_reuse','textual_reproduction_attribution','claimed_answer_reuse','preparation_claim'].includes(edge.edge_type) ? 'This relation contains a recorded claim of reuse or preparation. A claim is not an independently verified action or successful reproduction.' : ['shared_artifact','independent_agreement'].includes(edge.edge_type) ? 'Both records contain a matching artifact. Common prompts, shared sources, quotation, or independent discovery can also produce matches.' : 'An explicit reference may support transmission of information. It does not establish that the later actor adopted a broader goal.'));
     list(edge.limitations).forEach(v => notes.append(el('p','note',string(v)))); panel.append(notes);
   }
   function renderEventDetail(event) {

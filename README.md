@@ -113,8 +113,8 @@ flags and preserve those context records; otherwise new-memory claims lack
 their requested comparison. Current row content can reflect later updates,
 which remain explicit in provenance.
 
-The chat table has been supplied and validated locally; memories are the next
-input. If the memory archive is too large to transfer, use the standalone local
+The chat table and a 146-row memory crop have been supplied and validated
+locally. The reviewed case remains private. If the full memory archive is too large to transfer, use the standalone local
 filter (Python 3.10+, no extra packages):
 
 ```sh
@@ -127,7 +127,15 @@ preserving nearest memory snapshots before and after the June 1-2 window.
 The preset resolves exact export-time labels to UUIDs and rejects ambiguity.
 See the [transfer instructions](docs/AI_VILLAGE_INPUTS.md#when-the-memory-archive-is-too-large).
 
-Events and goals add
+Reviewed textual associations can use `directed: false` with
+`ordering_status: "known"`. The viewer then shows record chronology without a
+transport arrow. A matching correction in a later memory, even with a named
+corrector, does not identify the exact source message or establish delivered
+model context.
+
+The supplied rendered transcript adds history-search and consolidation event
+context, but lacks row IDs and agent UUIDs. It is not a replacement for raw
+computer-use turns. Events and goals add
 context; sessions and turns add action evidence. Event-table importing is not
 implemented yet. See [input requirements](docs/AI_VILLAGE_INPUTS.md),
 [metadata checks](docs/AI_VILLAGE_VALIDATION.md), and
